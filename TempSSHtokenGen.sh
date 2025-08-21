@@ -76,10 +76,10 @@ revoke_token() {
 list_tokens() {
     NOW=$(date +%s)
     echo "📋 Active Tokens:"
-    while IFS=: read -r TOKEN KEY EXPIRY; do
-        if [ "$NOW" -lt "$EXPIRY" ]; then
+    while IFS=: read -r TOKEN KEY EXPIRY PID; do
+        if [ -n "$TOKEN" ] && [ "$NOW" -lt "$EXPIRY" ]; then
             EXPIRY_HUMAN=$(date -d "@$EXPIRY" '+%Y-%m-%d %H:%M:%S')
-            echo "🔐 $TOKEN | Expires: $EXPIRY_HUMAN"
+            echo "🔐 $TOKEN | Expires: $EXPIRY_HUMAN | PID: $PID"
         fi
     done < "$DB_FILE"
     exit 0
